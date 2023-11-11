@@ -10,21 +10,121 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: rgb(18, 18, 44);
-    justify-content: center;
-    align-items: center;
+    background-color: rgb(99, 99, 109);
+}
+@font-face {
+    font-family: "Roboto";
+    src: url("./fonts/Roboto/Roboto-Regular.ttf"), format("truetype");
+}
+@font-face {
+    font-family: "Calculator";
+    src: url("./fonts/Calculator.ttf"), format("truetype");
 }
 
 header {
+    font-family: "Roboto";
+    font-weight: bold;
+    font-size: 40px;
+    letter-spacing: 0.3rem;
+    text-align: center;
+    background-color: rgb(30, 30, 56);
+    color: white;
+    padding: 20px 300px;
+}
+main {
     display: flex;
     justify-content: center;
-    margin: 15px 0px 15px 0px;
+    align-items: center;
+    flex-grow: 1;
+}
+footer {
+    font-family: "Roboto";
+    font-weight: lighter;
+    font-size: 16px;
+    background-color: rgb(30, 30, 56);
+    color: white;
+    padding: 20px 300px;
+    text-align: center;
 }
 
-footer {
-    color: white;
-    margin-top: 40px;
+.calculatorContainer {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(199, 199, 199);
+    /* width: 550px; */
+    height: 700px;
+    border-radius: 20px 20px 35px 35px;
+    border: 0.2rem solid black;
+}
+.calculatorName {
+    padding-top: 10px;
+    padding-left: 30px;
+    font-weight: bold;
+    font-size: larger;
+}
+.calculatorTop {
+    background-color: gray;
+    margin: 10px;
+    width: 500px;
+    height: 150px;
+    border: thick solid black;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.calculatorScreen {
+    background-color: rgb(171, 180, 169);
+    border: 0.3rem solid rgb(82, 82, 82);
+    border-radius: 20px;
+    width: 475px;
+    height: 100px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.screenNumbers {
+    font-family: "Calculator";
+    font-size: 70px;
+    letter-spacing: 4px;
+    display: flex;
+    padding-right: 24px;
+}
+
+.calculatorBottom {
+    display: flex;
+    flex: 1;
+    margin: 0px 10px 10px 10px;
+    border-radius: 20px;
+    border: 0.3rem solid rgb(82, 82, 82);
+    background-color: gray;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: 86.4px 86.4px 86.4px 86.4px 86.4px;
+    padding: 10px;
+    gap: 10px;
+    align-items: center;
+}
+.grid-button {
+    font-family: "Roboto";
+    background-color: rgb(204, 204, 204);
+    border: 4px solid rgb(99, 99, 99);
+    border-radius: 30px;
+    padding: 20px;
+    font-size: 16px;
+    font-weight: bolder;
     text-align: center;
-    font-family: sans-serif;
-    font-weight: lighter;
+    color: black;
+}
+.grid-button.clear {
+    background-color: rgb(177, 0, 0);
+}
+.grid-button.number {
+    background-color: rgb(36, 36, 36);
+    color: white;
+}
+.grid-button:hover {
+    opacity: 0.8;
+    cursor: pointer;
 }
