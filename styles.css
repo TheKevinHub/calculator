@@ -10,7 +10,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: rgb(99, 99, 109);
+    background-color: lightsteelblue;
 }
 @font-face {
     font-family: "Roboto";
@@ -27,7 +27,7 @@ header {
     font-size: 40px;
     letter-spacing: 0.3rem;
     text-align: center;
-    background-color: rgb(30, 30, 56);
+    background-color: darkslateblue;
     color: white;
     padding: 20px 300px;
 }
@@ -41,16 +41,19 @@ footer {
     font-family: "Roboto";
     font-weight: lighter;
     font-size: 16px;
-    background-color: rgb(30, 30, 56);
+    background-color: darkslateblue;
     color: white;
     padding: 20px 300px;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .calculatorContainer {
     display: flex;
     flex-direction: column;
-    background-color: rgb(199, 199, 199);
+    background-color: rgb(197, 173, 173);
     /* width: 550px; */
     height: 700px;
     border-radius: 20px 20px 35px 35px;
@@ -85,10 +88,19 @@ footer {
 }
 .screenNumbers {
     font-family: "Calculator";
-    font-size: 70px;
-    letter-spacing: 4px;
+    /* padding-right: 10px; */
     display: flex;
-    padding-right: 24px;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    letter-spacing: 1px;
+}
+.previous {
+    font-size: 26px;
+    text-align: right;
+}
+.current {
+    font-size: 36px;
 }
 
 .calculatorBottom {
@@ -127,4 +139,9 @@ footer {
 .grid-button:hover {
     opacity: 0.8;
     cursor: pointer;
+}
+
+.githubLogo {
+    width: 40px;
+    height: auto;
 }
