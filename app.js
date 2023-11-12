@@ -1,104 +1,143 @@
-let operator = '';
-let previousValue = '';
-let currentValue = '';
+let operandOne = ''
+let operandTwo = ''
+let currentOperation = null
+let shouldResetScreen = false
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Store all components on HTML in JS
-    let clear = document.querySelector("#clear");
-    let clearAll = document.querySelector("#clearAll");
-    let equal = document.querySelector("#equal");
-    let decimal = document.querySelector("#decimal");
+const clearBtn = document.querySelector("#clear");
+const clearAllBtn = document.querySelector("#clearAll");
+const equalBtn = document.querySelector("#equal");
+const decimalBtn = document.querySelector("#decimal");
+const numbers = document.querySelectorAll("#number");
+const operators = document.querySelectorAll("#operator");
+const previousScreen = document.querySelector(".previous");
+const currentScreen = document.querySelector(".current");
 
-    let numbers = document.querySelectorAll("#number");
-    let operators = document.querySelectorAll("#operator");
+window.addEventListener('keydown', handleKeyboardInput)
+equalBtn.addEventListener('click', evaluate)
+clearBtn.addEventListener('click', deleteNumber)
+clearAllBtn.addEventListener('click', clear)
+decimalBtn.addEventListener('click', appendDecimal)
 
-    let previousScreen = document.querySelector(".previous");
-    let currentScreen = document.querySelector(".current");
-
-    numbers.forEach((number) => number.addEventListener("click", function(e) {
-        handleNumber(e.target.textContent)
-        currentScreen.textContent = currentValue;
-    }))
-
-    operators.forEach((op) => op.addEventListener("click", function(e) {
-        handleOperator(e.target.textContent)
-        previousScreen.textContent = previousValue + " " + operator;
-        currentScreen.textContent = currentValue;
-    }))
-
-    clear.addEventListener("click", function() {
-        currentValue = '';
-        operator = '';
-        currentScreen.textContent = '';
-    })
-    clearAll.addEventListener("click", function() {
-        previousValue = '';
-        currentValue = '';
-        operator = '';
-        previousScreen.textContent = '';
-        currentScreen.textContent = '';
-    })
-
-    equal.addEventListener("click", function() {
-        if (currentValue != '' && previousValue != '') {
-            calculate();
-            previousScreen.textContent = '';
-            if (previousValue.length <= 5) {
-                currentScreen.textContent = previousValue;
-            }
-            else {
-                currentScreen.textContent = previousValue.slice(0,5) + "..."; // WIP
-            }
-        }        
-    })
-
-    decimal.addEventListener("click", function() {
-        addDecimal();
-    })
+numbers.forEach((button) => {
+    button.addEventListener('click', () => appendNumber(button.textContent))
 })
 
-function handleNumber(num) {
-    if (currentValue.length <= 27) {
-        currentValue += num;
+operators.forEach((button) => {
+    button.addEventListener('click', () => setOperation(button.textContent))
+})
+
+function appendNumber(number) {
+    if (currentScreen.textContent === '0' || shouldResetScreen) {
+        resetScreen();
+    }
+    currentScreen.textContent += number;
+}
+
+function resetScreen() {
+    currentScreen.textContent = ''
+    shouldResetScreen = false
+}
+
+function clear() {
+    currentScreen.textContent = '0'
+    previousScreen.textContent = ''
+    operandOne = ''
+    operandTwo = ''
+    currentOperation = null
+}
+
+function appendDecimal() {
+    if (shouldResetScreen) { resetScreen() }
+    if (currentScreen.textContent === '') {
+        currentScreen.textContent = '0'
+    }
+    if (currentScreen.textContent.includes('.')) { return }
+    currentScreen.textContent += '.'
+}
+
+function deleteNumber() {
+    currentScreen.textContent = currentScreen.textContent.toString().slice(0, -1)
+}
+
+function setOperation(operator) {
+    if (currentOperation !== null) {
+        evaluate()
+    }
+    operandOne = currentScreen.textContent
+    currentOperation = operator
+    previousScreen.textContent = `${operandOne} ${currentOperation}`
+    shouldResetScreen = true
+}
+
+function evaluate() {
+    if (currentOperation === null || shouldResetScreen) {
+        return
+    }
+    if (currentOperation === '+' && currentScreen.textContent === '0') {
+        alert("Cannot divide by 0")
+        return
+    }
+    operandTwo = currentScreen.textContent
+    currentScreen.textContent = roundResult(operate(currentOperation, operandOne, operandTwo))
+    previousScreen.textContent = `${operandOne} ${currentOperation} ${operandTwo}`
+    currentOperation = null
+}
+
+function roundResult(number) {
+    return Math.round(number * 1000) / 1000
+}
+
+function handleKeyboardInput(e) {
+    if (e.key >= 0 && e.key <= 9) {appendNumber(e.key)}
+    if (e.key == '.') { appendDecimal() }
+    if (e.key === '=' || e.key === 'Enter') { evaluate() }
+    if (e.key === 'Backspace') { deleteNumber() }
+    if (e.key === 'Escape') { clear() }
+    if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') {
+        setOperation(convertOperator(e.key))
     }
 }
 
-function handleOperator(op) {
-    operator = op;
-    previousValue = currentValue;
-    currentValue = '';
+function convertOperator(keyboardOperator) {
+    if (keyboardOperator === '/') { return '÷' }
+    if (keyboardOperator === '*') { return '×' }
+    if (keyboardOperator === '-') { return '−' }
+    if (keyboardOperator === '+') { return '+' }
 }
 
-function calculate() {
-    previousValue = Number(previousValue);
-    currentValue = Number(currentValue);
-
-    if (operator === "+") {
-        previousValue += currentValue;
-    }
-    else if (operator === "-"){
-        previousValue -= currentValue;
-    }
-    else if (operator === "X") {
-        previousValue *= currentValue;
-    }
-    else if (operator === "÷") {
-        previousValue /= currentValue;
-    }
-    // WIP - else if for the rest of the operators ' % | √ '
-
-    previousValue = roundNumber(previousValue);
-    previousValue = previousValue.toString();
-    currentValue = previousValue.toString();
-    console.log(previousValue);
+function add(a, b) {
+    return a + b
 }
 
-function roundNumber(num) {
-    return Math.round(num * 1000000) / 1000000;
+function substract(a, b) {
+    return a - b
 }
 
-function addDecimal() {
-    if (!currentValue.includes(".")) {
-        currentValue += ".";
+function multiply(a, b) {
+    return a * b
+}
+
+function divide(a, b) {
+    return a / b
+}
+
+function operate(operator, a, b) {
+    a = Number(a)
+    b = Number(b)
+    switch (operator) {
+        case '+':
+            return add(a, b)
+        case '−':
+            return substract(a, b)
+        case '×':
+            return multiply(a, b)
+        case '÷':
+            if (b === 0) {return null}
+            else return divide(a, b)
+        // add the remaining operators and their functions
+        default:
+            return null
     }
 }
+
+// Thank you to michalosman. I needed to fix my 'C' button and instead I redid the entire .js code
