@@ -11,12 +11,15 @@ const numbers = document.querySelectorAll("#number");
 const operators = document.querySelectorAll("#operator");
 const previousScreen = document.querySelector(".previous");
 const currentScreen = document.querySelector(".current");
+const signBtn = document.querySelector("#sign");
 
 window.addEventListener('keydown', handleKeyboardInput)
 equalBtn.addEventListener('click', evaluate)
 clearBtn.addEventListener('click', deleteNumber)
 clearAllBtn.addEventListener('click', clear)
 decimalBtn.addEventListener('click', appendDecimal)
+signBtn.addEventListener('click', switchSign)
+
 
 numbers.forEach((button) => {
     button.addEventListener('click', () => appendNumber(button.textContent))
@@ -55,6 +58,11 @@ function appendDecimal() {
     currentScreen.textContent += '.'
 }
 
+function switchSign() {
+    let a = Number(currentScreen.textContent)
+    currentScreen.textContent = a * -1
+}
+
 function deleteNumber() {
     currentScreen.textContent = currentScreen.textContent.toString().slice(0, -1)
 }
@@ -71,10 +79,14 @@ function setOperation(operator) {
 
 function evaluate() {
     if (currentOperation === null || shouldResetScreen) {
+        if (currentOperation === '%') {
+            let a = Number(currentScreen.textContent)
+            currentScreen.textContent = percent(a)
+        }
         return
     }
-    if (currentOperation === '+' && currentScreen.textContent === '0') {
-        alert("Cannot divide by 0")
+    if (currentOperation === '÷' && currentScreen.textContent === '0') {
+        alert("You can't divide by 0 silly human.")
         return
     }
     operandTwo = currentScreen.textContent
@@ -121,6 +133,14 @@ function divide(a, b) {
     return a / b
 }
 
+function squareRoot(a, b) {
+    return a * Math.sqrt(b)
+}
+
+function percent(a) {
+    return a / 100
+}
+
 function operate(operator, a, b) {
     a = Number(a)
     b = Number(b)
@@ -134,10 +154,11 @@ function operate(operator, a, b) {
         case '÷':
             if (b === 0) {return null}
             else return divide(a, b)
-        // add the remaining operators and their functions
+        case '√':
+            return squareRoot(a, b)
         default:
             return null
     }
 }
 
-// Thank you to michalosman. I needed to fix my 'C' button and instead I redid the entire .js code
+// Thank you to michalosman. I needed to fix my 'C' button and instead I reworked the entire .js code

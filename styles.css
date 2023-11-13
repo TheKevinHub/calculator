@@ -144,3 +144,10 @@ footer {
     width: 40px;
     height: auto;
 }
+
+#WIP {
+    cursor: not-allowed;
+}
+#WIP:hover {
+    background-color: black;
+}
